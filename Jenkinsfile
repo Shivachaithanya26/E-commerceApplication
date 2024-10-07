@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        DEPLOY_SERVER = 'ubuntu@34.238.168.207'  // Replace with your server's SSH user and IP
+        DEPLOY_SERVER = 'ubuntu@54.224.210.19'  // Replace with your server's SSH user and IP
         DEPLOY_PATH = '/var/www/html/'   // Path where the PHP application will be deployed
     }
     stages {
