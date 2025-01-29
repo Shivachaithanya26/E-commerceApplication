@@ -20,9 +20,9 @@ pipeline {
                     sh """
                     ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP << EOF
                     cd $DEPLOY_DIR
-                    git pull origin main
-                    composer install  # Modify based on your project (e.g., pip install, composer install)
-                    systemctl restart nginx  # Change to apache2, pm2, etc.
+                    sudo git pull origin main
+                    sudo composer install  # Modify based on your project (e.g., pip install, composer install)
+                    sudo systemctl restart nginx  # Change to apache2, pm2, etc.
                     EOF
                     """
                 }
