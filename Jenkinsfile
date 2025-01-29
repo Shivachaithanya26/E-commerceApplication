@@ -1,47 +1,32 @@
 pipeline {
     agent any
+
     environment {
-        DEPLOY_SERVER = 'ubuntu@54.224.210.19'  // Replace with your server's SSH user and IP
-        DEPLOY_PATH = '/var/www/html/'   // Path where the PHP application will be deployed
+        DEPLOY_DIR = "/var/www/html/E-commerceApplication"
+        SERVER_USER = "ubuntu"
+        SERVER_IP = "54.221.166.139"
     }
+
     stages {
         stage('Checkout Code') {
             steps {
-                // Checkout your code from Git or another source
-                git 'https://github.com/Shivachaithanya26/E-commerceApplication.git'
+                git branch: 'main', credentialsId: 'your-credentials-id', url: 'git@github.com:your-username/your-repo.git'
             }
         }
+
         stage('Deploy to Server') {
             steps {
-                // Use SCP to copy the code files to the /var/www/html/ directory
-                sh """
-                scp -r * ${DEPLOY_SERVER}:${DEPLOY_PATH}
-                """
+                sshagent(['your-credentials-id']) {
+                    sh """
+                    ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP << EOF
+                    cd $DEPLOY_DIR
+                    git pull origin main
+                    composer install  # Modify based on your project (e.g., pip install, composer install)
+                    systemctl restart nginx  # Change to apache2, pm2, etc.
+                    EOF
+                    """
+                }
             }
-        }
-        stage('Set Permissions') {
-            steps {
-                // Ensure correct file permissions for the web server
-                sh """
-                ssh ${DEPLOY_SERVER} 'sudo chown -R www-data:www-data ${DEPLOY_PATH} && sudo chmod -R 755 ${DEPLOY_PATH}'
-                """
-            }
-        }
-        stage('Restart PHP-FPM') {
-            steps {
-                // Restart PHP-FPM to apply the changes
-                sh """
-                ssh ${DEPLOY_SERVER} 'sudo systemctl restart php-fpm'
-                """
-            }
-        }
-    }
-    post {
-        success {
-            echo 'Deployment succeeded!'
-        }
-        failure {
-            echo 'Deployment failed.'
         }
     }
 }
