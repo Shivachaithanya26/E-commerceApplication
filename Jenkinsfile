@@ -18,7 +18,7 @@ pipeline {
             steps {
                 sshagent(['your-credentials-id']) {
                     sh """
-                    ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP << EOF
+                    ssh -o StrictHostKeyChecking=no your-user@your-application-server-ip << EOF
                     cd $DEPLOY_DIR
                     sudo git pull origin main
                     sudo composer install  # Modify based on your project (e.g., pip install, composer install)
