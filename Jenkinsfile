@@ -7,10 +7,10 @@ pipeline {
         SERVER_IP = "54.221.166.139"
     }
 
-    stages {
+stages {
         stage('Checkout Code') {
             steps {
-                git branch: 'main', credentialsId: 'your-credentials-id', url: 'git@github.com:your-username/your-repo.git'
+                git branch: 'main', credentialsId: 'your-credentials-id', url: 'git@github.com:Shivachaithanya26/E-commerceApplication.git'
             }
         }
 
